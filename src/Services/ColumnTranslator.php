@@ -6,27 +6,30 @@ use Illuminate\Support\Collection;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Column;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 
-class ColumnTranslator
+class ColumnTranslator extends Translator
 {
     private $tables;
-    private $buffer = [];
 
     public function __construct(Collection $tables)
     {
         $this->tables = $tables;
     }
 
-    private function filename()
+    protected function filename(): string
     {
-        return resource_path('lang/ja/columns.php');
+        return resource_path(sprintf('lang/%s/columns.php', app()->getLocale()));
     }
 
-    public function make()
+    /**
+     * @return bool
+     */
+    public function make(): bool
     {
         $this->tables->each(function (Table $table) {
             $table->columns->each(function (Column $column) {
                 $this->buffer[$column->TABLE_NAME][$column->COLUMN_NAME] = $column->COLUMN_COMMENT;
             });
         });
+        return file_put_contents($this->filename(), $this->code()) !== false;
     }
 }

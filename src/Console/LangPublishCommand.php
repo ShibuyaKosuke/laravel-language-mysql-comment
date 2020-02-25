@@ -27,12 +27,14 @@ class LangPublishCommand extends Command
     {
         $tables = Table::query()
             ->with(['columns', 'columns.key_column_usage'])
-            ->get()
-            ->reject(function (Table $table) {
-                return empty($table->TABLE_COMMENT);
-            });
+            ->where('TABLE_COMMENT', '<>', '')
+            ->get();
 
-        (new TableTranslator($tables))->make();
-        (new ColumnTranslator($tables))->make();
+        if ((new TableTranslator($tables))->make()) {
+            $this->info('Success: Resources/lang/tables.php');
+        }
+        if ((new ColumnTranslator($tables))->make()) {
+            $this->info('Success: Resources/lang/columns.php');
+        }
     }
 }
