@@ -7,5 +7,17 @@
             "email": "shibuya@imagenious.co.jp"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "ShibuyaKosuke\\LaravelLanguageMysqlComment\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ShibuyaKosuke\\LaravelLanguageMysqlComment\\Providers\\CommandServiceProvider"
+            ]
+        }
+    },
     "require": {}
 }
