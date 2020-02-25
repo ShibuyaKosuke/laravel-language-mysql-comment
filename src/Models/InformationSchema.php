@@ -11,6 +11,8 @@ use ShibuyaKosuke\LaravelLanguageMysqlComment\Scopes\OwnDatabaseScope;
  */
 abstract class InformationSchema extends Model
 {
+    protected $primaryKey = null;
+    public $incrementing = false;
 
     protected static function boot()
     {

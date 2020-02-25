@@ -3,6 +3,7 @@
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use ShibuyaKosuke\LaravelLanguageMysqlComment\Console\LangPublishCommand;
 
 /**
  * Class CommandServiceProvider
@@ -24,10 +25,20 @@ class CommandServiceProvider extends ServiceProvider
 
     protected function registerCommands()
     {
+        $this->app->singleton('command.trans.publish', function () {
+            return new LangPublishCommand();
+        });
+
+        $this->commands([
+            'command.trans.publish',
+        ]);
 
     }
 
     public function provides()
     {
+        return [
+            'command.trans.publish',
+        ];
     }
 }
