@@ -3,7 +3,7 @@
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Shibuyakosuke\LaravelLanguageMysqlComment\Scopes\OwnDatabaseScope;
+use ShibuyaKosuke\LaravelLanguageMysqlComment\Scopes\OwnDatabaseScope;
 
 /**
  * Class InformationSchema

@@ -17,7 +17,7 @@ class Table extends InformationSchema
      */
     public function columns(): HasMany
     {
-        return $this->hasMany(Column::class, 'table_name', 'table_name');
+        return $this->hasMany(Column::class, 'TABLE_NAME', 'TABLE_NAME');
     }
 
     /**
@@ -25,7 +25,7 @@ class Table extends InformationSchema
      */
     public function key_column_usages(): HasMany
     {
-        return $this->hasMany(KeyColumnUsage::class, 'table_name', 'table_name')
+        return $this->hasMany(KeyColumnUsage::class, 'TABLE_NAME', 'TABLE_NAME')
             ->whereNotNull('REFERENCED_TABLE_NAME')
             ->whereNotNull('REFERENCED_COLUMN_NAME');
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Shibuyakosuke\LaravelLanguageMysqlComment\Scopes;
+namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
