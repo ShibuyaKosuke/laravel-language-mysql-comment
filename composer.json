@@ -1,0 +1,11 @@
+{
+    "name": "shibuyakosuke/laravel-language-mysql-comment",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "KosukeShibuya",
+            "email": "shibuya@imagenious.co.jp"
+        }
+    ],
+    "require": {}
+}
