@@ -13,12 +13,20 @@ class Column extends InformationSchema
     protected $table = 'information_schema.columns';
 
     /**
-     * Table
-     * @return BelongsTo
+     * @return BelongsTo Table
      */
     public function table(): BelongsTo
     {
         return $this->belongsTo(Table::class, 'table_name', 'table_name');
+    }
+
+    /**
+     * @return BelongsTo KeyColumnUsage
+     */
+    public function key_column_usage()
+    {
+        return $this->belongsTo(KeyColumnUsage::class, 'column_name', 'column_name')
+            ->withDefault();
     }
 
     /**
