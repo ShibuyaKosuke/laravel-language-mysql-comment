@@ -2,27 +2,29 @@
 
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Services;
 
-use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Column;
+use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 
 class ColumnValidator
 {
-    private $columns;
+    private $table;
     private $rules = [];
 
-    public function __construct(Collection $columns)
+    public function __construct(Table $table)
     {
-        $this->columns = $columns;
+        $this->table = $table;
     }
 
+    /**
+     * @return bool|void
+     */
     public function make()
     {
-        $this->columns->each(function (Column $column) {
+        $this->table->columns->each(function (Column $column) {
 
-            // required or nullable
             $this->rules[$column->COLUMN_NAME][] = ($column->is_required) ? 'required' : 'nullable';
 
-            // data_type
             if ($column->is_datetime) {
                 $this->rules[$column->COLUMN_NAME][] = 'datetime';
             } elseif ($column->is_date) {
@@ -35,17 +37,29 @@ class ColumnValidator
                 $this->rules[$column->COLUMN_NAME][] = 'string';
             }
 
-            // max
             if ($column->max_length) {
                 $this->rules[$column->COLUMN_NAME][] = sprintf('max:%d', $column->max_length);
             }
 
             $key_column_usage = $column->keyColumnUsage;
             if ($key_column_usage) {
-                $tbl = $key_column_usage->REFERENCED_TABLE_NAME;
-                $col = $key_column_usage->REFERENCED_COLUMN_NAME;
-                $this->rules[$column->COLUMN_NAME][] = sprintf('exists:%s,%s', $tbl, $col);
+                $this->rules[$column->COLUMN_NAME][] = sprintf(
+                    'exists:%s,%s',
+                    $key_column_usage->REFERENCED_TABLE_NAME,
+                    $key_column_usage->REFERENCED_COLUMN_NAME
+                );
             }
         });
+
+        dump($this->filename());
+    }
+
+    protected function filename(): string
+    {
+        return app_path(
+            sprintf('Http/Controllers/Requests/%sFormRequest',
+                Str::studly(Str::singular($this->table->TABLE_NAME))
+            )
+        );
     }
 }

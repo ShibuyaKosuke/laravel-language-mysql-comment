@@ -32,7 +32,7 @@ class LangPublishCommand extends Command
             ->get();
 
         $tables->each(function (Table $table) {
-            (new ColumnValidator($table->columns))->make();
+            (new ColumnValidator($table))->make();
         });
 
 //        if ((new TableTranslator($tables))->make()) {
