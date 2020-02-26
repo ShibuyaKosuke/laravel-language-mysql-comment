@@ -23,7 +23,7 @@ class Column extends InformationSchema
     /**
      * @return BelongsTo KeyColumnUsage
      */
-    public function key_column_usage()
+    public function keyColumnUsage()
     {
         return $this->belongsTo(KeyColumnUsage::class, 'COLUMN_NAME', 'COLUMN_NAME')
             ->whereNotNull('REFERENCED_TABLE_NAME')

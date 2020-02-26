@@ -15,6 +15,5 @@ class ColumnValidator
 
     public function make()
     {
-
     }
 }

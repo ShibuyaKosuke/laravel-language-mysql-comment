@@ -19,5 +19,4 @@ abstract class InformationSchema extends Model
         parent::boot();
         static::addGlobalScope(new OwnDatabaseScope());
     }
-
 }

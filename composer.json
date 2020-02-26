@@ -19,5 +19,16 @@
             ]
         }
     },
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "scripts": {
+        "sniffer": [
+            ".\\vendor\\bin\\phpcs  --standard=phpcs.xml .\\"
+        ],
+        "sniffer-rewrite": [
+            ".\\vendor\\bin\\phpcbf --standard=phpcs.xml .\\"
+        ]
+    }
 }

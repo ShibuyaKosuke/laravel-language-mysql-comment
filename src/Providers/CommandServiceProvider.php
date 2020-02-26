@@ -20,7 +20,6 @@ class CommandServiceProvider extends ServiceProvider
 
     public function register()
     {
-
     }
 
     protected function registerCommands()
@@ -32,7 +31,6 @@ class CommandServiceProvider extends ServiceProvider
         $this->commands([
             'command.trans.publish',
         ]);
-
     }
 
     public function provides()

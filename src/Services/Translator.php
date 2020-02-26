@@ -4,7 +4,7 @@ namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Services;
 
 abstract class Translator
 {
-    const INDENT = '    ';
+    protected const INDENT = '    ';
 
     protected $buffer = [];
 
