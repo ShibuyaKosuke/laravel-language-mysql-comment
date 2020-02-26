@@ -1,1 +1,1 @@
-"# laravel-language-mysql-comment" 
+# laravel-language-mysql-comment

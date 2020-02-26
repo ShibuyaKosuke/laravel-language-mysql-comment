@@ -2,16 +2,16 @@
 <ruleset name="PSR12/Laravel">
     <description>PSR12 compliant rules and settings for Laravel</description>
 
-    <arg name="extensions" value="php" />
+    <arg name="extensions" value="php"/>
 
     <!-- 適用コーディング規約の指定 -->
-    <rule ref="PSR12" />
+    <rule ref="PSR12"/>
 
     <!-- 出力に色を適用 -->
-    <arg name="colors" />
+    <arg name="colors"/>
 
     <!-- オプション p:進捗表示  s:エラー表示時にルールを表示 -->
-    <arg value="ps" />
+    <arg value="ps"/>
 
     <!-- 除外ディレクトリ -->
     <exclude-pattern>/vendor/</exclude-pattern>
