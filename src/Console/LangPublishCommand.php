@@ -26,7 +26,7 @@ class LangPublishCommand extends Command
     public function handle(): void
     {
         $tables = Table::query()
-            ->with(['columns', 'columns.key_column_usage'])
+            ->with(['columns', 'columns.keyColumnUsage'])
             ->where('TABLE_COMMENT', '<>', '')
             ->get();
 
