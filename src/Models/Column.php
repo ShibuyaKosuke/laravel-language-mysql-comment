@@ -36,16 +36,7 @@ class Column extends InformationSchema
      */
     public function getIsRequiredAttribute()
     {
-        return $this->getAttribute('IS_NULLABLE') === 'NO';
-    }
-
-    /**
-     * data_type
-     * @return string
-     */
-    public function getDataTypeAttribute(): string
-    {
-        return $this->getAttribute('DATA_TYPE');
+        return $this->IS_NULLABLE === 'NO';
     }
 
     /**
@@ -54,7 +45,7 @@ class Column extends InformationSchema
      */
     public function getIsIntegerAttribute(): bool
     {
-        $data_type = $this->getAttribute('DATA_TYPE');
+        $data_type = $this->DATA_TYPE;
         if (strpos($data_type, 'int') !== false) {
             return true;
         }
@@ -67,7 +58,7 @@ class Column extends InformationSchema
      */
     public function getIsNumericAttribute(): bool
     {
-        $data_type = $this->getAttribute('DATA_TYPE');
+        $data_type = $this->DATA_TYPE;
         if (strpos($data_type, 'int') !== false) {
             return true;
         }
@@ -87,7 +78,7 @@ class Column extends InformationSchema
      */
     public function getIsStringAttribute(): bool
     {
-        $data_type = $this->getAttribute('DATA_TYPE');
+        $data_type = $this->DATA_TYPE;
         switch ($data_type) {
             case 'varchar':
             case 'char':
@@ -106,7 +97,7 @@ class Column extends InformationSchema
      */
     public function getIsDateAttribute(): bool
     {
-        $data_type = $this->getAttribute('DATA_TYPE');
+        $data_type = $this->DATA_TYPE;
         switch ($data_type) {
             case 'timestamp':
             case 'datetime':
@@ -123,7 +114,7 @@ class Column extends InformationSchema
      */
     public function getIsDatetimeAttribute(): bool
     {
-        $data_type = $this->getAttribute('DATA_TYPE');
+        $data_type = $this->DATA_TYPE;
         switch ($data_type) {
             case 'timestamp':
             case 'datetime':

@@ -5,6 +5,7 @@ namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Console;
 use Illuminate\Console\Command;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\ColumnTranslator;
+use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\ColumnValidator;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\TableTranslator;
 
 class LangPublishCommand extends Command
@@ -21,7 +22,7 @@ class LangPublishCommand extends Command
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = 'Output language files from DB column comments.';
 
     public function handle(): void
     {
@@ -30,11 +31,15 @@ class LangPublishCommand extends Command
             ->where('TABLE_COMMENT', '<>', '')
             ->get();
 
-        if ((new TableTranslator($tables))->make()) {
-            $this->info('Success: Resources/lang/tables.php');
-        }
-        if ((new ColumnTranslator($tables))->make()) {
-            $this->info('Success: Resources/lang/columns.php');
-        }
+        $tables->each(function (Table $table) {
+            (new ColumnValidator($table->columns))->make();
+        });
+
+//        if ((new TableTranslator($tables))->make()) {
+//            $this->info('Success: Resources/lang/tables.php');
+//        }
+//        if ((new ColumnTranslator($tables))->make()) {
+//            $this->info('Success: Resources/lang/columns.php');
+//        }
     }
 }
