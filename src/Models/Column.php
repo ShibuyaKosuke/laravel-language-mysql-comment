@@ -102,6 +102,7 @@ class Column extends InformationSchema
             case 'timestamp':
             case 'datetime':
             case 'date':
+            case 'time':
                 return true;
             default:
                 return false;

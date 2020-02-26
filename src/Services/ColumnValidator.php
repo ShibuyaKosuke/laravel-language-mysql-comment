@@ -51,6 +51,7 @@ class ColumnValidator
             }
         });
 
+        $this->parse();
         dump($this->filename());
     }
 
@@ -61,5 +62,21 @@ class ColumnValidator
                 Str::studly(Str::singular($this->table->TABLE_NAME))
             )
         );
+    }
+
+    public function parse()
+    {
+        $indent = '    ';
+        $columns = array_map(function ($rule) {
+            return '[' . implode(', ', array_map(function ($val) {
+                    return sprintf('\'%s\'', $val);
+                }, $rule)) . '],';
+        }, $this->rules);
+
+        $lines = [];
+        foreach ($columns as $col => $val) {
+            $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
+        }
+        dump(implode(PHP_EOL, ['return [', implode(PHP_EOL, $lines), '];']));
     }
 }
