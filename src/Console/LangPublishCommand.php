@@ -35,11 +35,11 @@ class LangPublishCommand extends Command
             (new ColumnValidator($table))->make();
         });
 
-//        if ((new TableTranslator($tables))->make()) {
-//            $this->info('Success: Resources/lang/tables.php');
-//        }
-//        if ((new ColumnTranslator($tables))->make()) {
-//            $this->info('Success: Resources/lang/columns.php');
-//        }
+        if ((new TableTranslator($tables))->make()) {
+            $this->info('Success: Resources/lang/tables.php');
+        }
+        if ((new ColumnTranslator($tables))->make()) {
+            $this->info('Success: Resources/lang/columns.php');
+        }
     }
 }

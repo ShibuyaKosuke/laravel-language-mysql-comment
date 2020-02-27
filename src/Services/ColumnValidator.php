@@ -52,7 +52,7 @@ class ColumnValidator
         });
 
         $this->parse();
-        dump($this->filename());
+        $rule = $this->filename();
     }
 
     protected function filename(): string
@@ -77,6 +77,6 @@ class ColumnValidator
         foreach ($columns as $col => $val) {
             $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
         }
-        dump(implode(PHP_EOL, ['return [', implode(PHP_EOL, $lines), '];']));
+        return implode(PHP_EOL, ['return [', implode(PHP_EOL, $lines), '];']);
     }
 }
