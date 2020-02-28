@@ -22,44 +22,22 @@ class ColumnValidator
     public function make()
     {
         $this->table->columns->each(function (Column $column) {
-
-            $this->rules[$column->COLUMN_NAME][] = ($column->is_required) ? 'required' : 'nullable';
-
-            if ($column->is_datetime) {
-                $this->rules[$column->COLUMN_NAME][] = 'datetime';
-            } elseif ($column->is_date) {
-                $this->rules[$column->COLUMN_NAME][] = 'date';
-            } elseif ($column->is_integer) {
-                $this->rules[$column->COLUMN_NAME][] = 'integer';
-            } elseif ($column->is_numeric) {
-                $this->rules[$column->COLUMN_NAME][] = 'numeric';
-            } elseif ($column->is_string) {
-                $this->rules[$column->COLUMN_NAME][] = 'string';
-            }
-
-            if ($column->max_length) {
-                $this->rules[$column->COLUMN_NAME][] = sprintf('max:%d', $column->max_length);
-            }
-
-            $key_column_usage = $column->keyColumnUsage;
-            if ($key_column_usage) {
-                $this->rules[$column->COLUMN_NAME][] = sprintf(
-                    'exists:%s,%s',
-                    $key_column_usage->REFERENCED_TABLE_NAME,
-                    $key_column_usage->REFERENCED_COLUMN_NAME
-                );
-            }
+            $this->nullableOrRequired($column);
+            $this->dataType($column);
+            $this->maxLength($column);
+            $this->exists($column);
         });
 
-        $this->parse();
-        $rule = $this->filename();
+        $contents = $this->parse();
+        $file = $this->filename();
+        file_put_contents($file, $contents);
     }
 
     protected function filename(): string
     {
-        return app_path(
-            sprintf('Http/Controllers/Requests/%sFormRequest',
-                Str::studly(Str::singular($this->table->TABLE_NAME))
+        return base_path(
+            sprintf('rules/%s.php',
+                $this->table->TABLE_NAME
             )
         );
     }
@@ -77,6 +55,45 @@ class ColumnValidator
         foreach ($columns as $col => $val) {
             $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
         }
-        return implode(PHP_EOL, ['return [', implode(PHP_EOL, $lines), '];']);
+        return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];']);
+    }
+
+    private function nullableOrRequired(Column $column)
+    {
+        $this->rules[$column->COLUMN_NAME][] = ($column->is_required) ? 'required' : 'nullable';
+    }
+
+    private function dataType(Column $column)
+    {
+        if ($column->is_datetime) {
+            $this->rules[$column->COLUMN_NAME][] = 'datetime';
+        } elseif ($column->is_date) {
+            $this->rules[$column->COLUMN_NAME][] = 'date';
+        } elseif ($column->is_integer) {
+            $this->rules[$column->COLUMN_NAME][] = 'integer';
+        } elseif ($column->is_numeric) {
+            $this->rules[$column->COLUMN_NAME][] = 'numeric';
+        } elseif ($column->is_string) {
+            $this->rules[$column->COLUMN_NAME][] = 'string';
+        }
+    }
+
+    private function maxLength(Column $column)
+    {
+        if ($column->max_length) {
+            $this->rules[$column->COLUMN_NAME][] = sprintf('max:%d', $column->max_length);
+        }
+    }
+
+    private function exists(Column $column)
+    {
+        $key_column_usage = $column->keyColumnUsage;
+        if ($key_column_usage) {
+            $this->rules[$column->COLUMN_NAME][] = sprintf(
+                'exists:%s,%s',
+                $key_column_usage->REFERENCED_TABLE_NAME,
+                $key_column_usage->REFERENCED_COLUMN_NAME
+            );
+        }
     }
 }

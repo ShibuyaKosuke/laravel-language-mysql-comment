@@ -24,8 +24,6 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->alias('rules', Repository::class);
         $this->app->instance('rules', $this->app->rules);
-
-        dd($this->app);
     }
 
     public function register()
