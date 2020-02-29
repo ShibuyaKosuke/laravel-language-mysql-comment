@@ -29,6 +29,7 @@ class ColumnValidator
         }
 
         $this->table->columns->each(function (Column $column) {
+<<<<<<< HEAD
             $this->nullable($column);
             $this->dateType($column);
             $this->maxLength($column);
@@ -91,6 +92,17 @@ class ColumnValidator
                 $key_column_usage->REFERENCED_COLUMN_NAME
             );
         }
+=======
+            $this->nullableOrRequired($column);
+            $this->dataType($column);
+            $this->maxLength($column);
+            $this->exists($column);
+        });
+
+        $contents = $this->parse();
+        $file = $this->filename();
+        file_put_contents($file, $contents);
+>>>>>>> 1f870a06019624b2967bedcf1d01f661049d7f51
     }
 
     /**
@@ -98,7 +110,15 @@ class ColumnValidator
      */
     protected function filename(): string
     {
+<<<<<<< HEAD
         return base_path(sprintf('rules/%s.php', $this->table->TABLE_NAME));
+=======
+        return base_path(
+            sprintf('rules/%s.php',
+                $this->table->TABLE_NAME
+            )
+        );
+>>>>>>> 1f870a06019624b2967bedcf1d01f661049d7f51
     }
 
     /**
@@ -118,5 +138,47 @@ class ColumnValidator
             $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
         }
         return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];']);
+<<<<<<< HEAD
+=======
+    }
+
+    private function nullableOrRequired(Column $column)
+    {
+        $this->rules[$column->COLUMN_NAME][] = ($column->is_required) ? 'required' : 'nullable';
+    }
+
+    private function dataType(Column $column)
+    {
+        if ($column->is_datetime) {
+            $this->rules[$column->COLUMN_NAME][] = 'datetime';
+        } elseif ($column->is_date) {
+            $this->rules[$column->COLUMN_NAME][] = 'date';
+        } elseif ($column->is_integer) {
+            $this->rules[$column->COLUMN_NAME][] = 'integer';
+        } elseif ($column->is_numeric) {
+            $this->rules[$column->COLUMN_NAME][] = 'numeric';
+        } elseif ($column->is_string) {
+            $this->rules[$column->COLUMN_NAME][] = 'string';
+        }
+    }
+
+    private function maxLength(Column $column)
+    {
+        if ($column->max_length) {
+            $this->rules[$column->COLUMN_NAME][] = sprintf('max:%d', $column->max_length);
+        }
+    }
+
+    private function exists(Column $column)
+    {
+        $key_column_usage = $column->keyColumnUsage;
+        if ($key_column_usage) {
+            $this->rules[$column->COLUMN_NAME][] = sprintf(
+                'exists:%s,%s',
+                $key_column_usage->REFERENCED_TABLE_NAME,
+                $key_column_usage->REFERENCED_COLUMN_NAME
+            );
+        }
+>>>>>>> 1f870a06019624b2967bedcf1d01f661049d7f51
     }
 }

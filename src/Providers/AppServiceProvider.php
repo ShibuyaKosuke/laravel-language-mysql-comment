@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPath('rules');
+        $this->registerCommands();
     }
 
     public function register()
