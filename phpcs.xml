@@ -14,5 +14,5 @@
     <arg value="ps"/>
 
     <!-- 除外ディレクトリ -->
-    <exclude-pattern>/vendor/</exclude-pattern>
+    <exclude-pattern>./vendor/</exclude-pattern>
 </ruleset>
