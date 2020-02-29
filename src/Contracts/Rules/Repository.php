@@ -2,6 +2,10 @@
 
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Contracts\Rules;
 
+/**
+ * Interface Repository
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Contracts\Rules
+ */
 interface Repository
 {
     /**

@@ -6,6 +6,10 @@ use Illuminate\Support\Collection;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Column;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 
+/**
+ * Class ColumnTranslator
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Services
+ */
 class ColumnTranslator extends Translator
 {
     private $tables;

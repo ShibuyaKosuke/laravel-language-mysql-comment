@@ -2,6 +2,10 @@
 
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Services;
 
+/**
+ * Class Translator
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Services
+ */
 abstract class Translator
 {
     protected const INDENT = '    ';

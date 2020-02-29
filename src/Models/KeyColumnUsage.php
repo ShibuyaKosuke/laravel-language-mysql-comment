@@ -19,4 +19,12 @@ class KeyColumnUsage extends InformationSchema
     {
         return $this->belongsTo(Table::class, 'TABLE_NAME', 'TABLE_NAME');
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getQueueableRelations()
+    {
+        return [];
+    }
 }

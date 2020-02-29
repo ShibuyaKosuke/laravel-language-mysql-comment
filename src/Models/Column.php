@@ -136,4 +136,12 @@ class Column extends InformationSchema
         }
         return null;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getQueueableRelations()
+    {
+        return [];
+    }
 }

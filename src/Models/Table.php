@@ -29,4 +29,12 @@ class Table extends InformationSchema
             ->whereNotNull('REFERENCED_TABLE_NAME')
             ->whereNotNull('REFERENCED_COLUMN_NAME');
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getQueueableRelations()
+    {
+        return [];
+    }
 }

@@ -8,6 +8,10 @@ use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\ColumnTranslator;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\ColumnValidator;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\TableTranslator;
 
+/**
+ * Class LangPublishCommand
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Console
+ */
 class LangPublishCommand extends Command
 {
     /**
@@ -27,18 +31,19 @@ class LangPublishCommand extends Command
     public function handle(): void
     {
         $tables = Table::query()
-            ->with(['columns', 'columns.keyColumnUsage'])
-            ->where('TABLE_COMMENT', '<>', '')
-            ->get();
+            ->with(['columns', 'columns.keyColumnUsage']);
 
-        $tables->each(function (Table $table) {
-            (new ColumnValidator($table))->make();
+        $tables->get()->each(function (Table $table) {
+            $file = (new ColumnValidator($table))->make();
+            $this->info('Success: ' . $file);
         });
 
-        if ((new TableTranslator($tables))->make()) {
+        $tables->where('TABLE_COMMENT', '<>', '');
+
+        if ((new TableTranslator($tables->get()))->make()) {
             $this->info('Success: Resources/lang/tables.php');
         }
-        if ((new ColumnTranslator($tables))->make()) {
+        if ((new ColumnTranslator($tables->get()))->make()) {
             $this->info('Success: Resources/lang/columns.php');
         }
     }

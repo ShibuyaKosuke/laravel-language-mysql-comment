@@ -2,10 +2,13 @@
 
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Services;
 
-use Illuminate\Support\Str;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Column;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 
+/**
+ * Class ColumnValidator
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Services
+ */
 class ColumnValidator
 {
     private $table;
@@ -17,53 +20,90 @@ class ColumnValidator
     }
 
     /**
-     * @return bool|void
+     * @return bool|string|string[]
      */
     public function make()
     {
+        if (!file_exists(base_path('rules'))) {
+            mkdir(base_path('rules'));
+        }
+
         $this->table->columns->each(function (Column $column) {
-
-            $this->rules[$column->COLUMN_NAME][] = ($column->is_required) ? 'required' : 'nullable';
-
-            if ($column->is_datetime) {
-                $this->rules[$column->COLUMN_NAME][] = 'datetime';
-            } elseif ($column->is_date) {
-                $this->rules[$column->COLUMN_NAME][] = 'date';
-            } elseif ($column->is_integer) {
-                $this->rules[$column->COLUMN_NAME][] = 'integer';
-            } elseif ($column->is_numeric) {
-                $this->rules[$column->COLUMN_NAME][] = 'numeric';
-            } elseif ($column->is_string) {
-                $this->rules[$column->COLUMN_NAME][] = 'string';
-            }
-
-            if ($column->max_length) {
-                $this->rules[$column->COLUMN_NAME][] = sprintf('max:%d', $column->max_length);
-            }
-
-            $key_column_usage = $column->keyColumnUsage;
-            if ($key_column_usage) {
-                $this->rules[$column->COLUMN_NAME][] = sprintf(
-                    'exists:%s,%s',
-                    $key_column_usage->REFERENCED_TABLE_NAME,
-                    $key_column_usage->REFERENCED_COLUMN_NAME
-                );
-            }
+            $this->nullable($column);
+            $this->dateType($column);
+            $this->maxLength($column);
+            $this->exists($column);
         });
 
-        $this->parse();
-        $rule = $this->filename();
+        $file = $this->filename();
+        if (file_put_contents($file, $this->parse())) {
+            return str_replace(base_path() . '/', '', $file);
+        }
+        return false;
     }
 
+    /**
+     * @param Column $column
+     */
+    private function nullable(Column $column)
+    {
+        $this->rules[$column->COLUMN_NAME][] = ($column->is_required) ? 'required' : 'nullable';
+    }
+
+    /**
+     * @param Column $column
+     */
+    private function dateType(Column $column)
+    {
+        if ($column->is_datetime) {
+            $this->rules[$column->COLUMN_NAME][] = 'datetime';
+        } elseif ($column->is_date) {
+            $this->rules[$column->COLUMN_NAME][] = 'date';
+        } elseif ($column->is_integer) {
+            $this->rules[$column->COLUMN_NAME][] = 'integer';
+        } elseif ($column->is_numeric) {
+            $this->rules[$column->COLUMN_NAME][] = 'numeric';
+        } elseif ($column->is_string) {
+            $this->rules[$column->COLUMN_NAME][] = 'string';
+        }
+    }
+
+    /**
+     * @param Column $column
+     */
+    private function maxLength(Column $column)
+    {
+        if ($column->max_length) {
+            $this->rules[$column->COLUMN_NAME][] = sprintf('max:%d', $column->max_length);
+        }
+    }
+
+    /**
+     * @param Column $column
+     */
+    private function exists(Column $column)
+    {
+        $key_column_usage = $column->keyColumnUsage;
+        if ($key_column_usage) {
+            $this->rules[$column->COLUMN_NAME][] = sprintf(
+                'exists:%s,%s',
+                $key_column_usage->REFERENCED_TABLE_NAME,
+                $key_column_usage->REFERENCED_COLUMN_NAME
+            );
+        }
+    }
+
+    /**
+     * @return string
+     */
     protected function filename(): string
     {
-        return app_path(
-            sprintf('Http/Controllers/Requests/%sFormRequest',
-                Str::studly(Str::singular($this->table->TABLE_NAME))
-            )
-        );
+        return base_path(sprintf('rules/%s.php', $this->table->TABLE_NAME));
     }
 
+    /**
+     * @return string
+     */
     public function parse()
     {
         $indent = '    ';
@@ -77,6 +117,6 @@ class ColumnValidator
         foreach ($columns as $col => $val) {
             $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
         }
-        return implode(PHP_EOL, ['return [', implode(PHP_EOL, $lines), '];']);
+        return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];']);
     }
 }

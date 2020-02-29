@@ -5,6 +5,10 @@ namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Services;
 use Illuminate\Support\Collection;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 
+/**
+ * Class TableTranslator
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Services
+ */
 class TableTranslator extends Translator
 {
     private $tables;

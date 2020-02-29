@@ -6,6 +6,10 @@ use ArrayAccess;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Contracts\Rules\Repository as RuleContract;
 use Illuminate\Support\Arr;
 
+/**
+ * Class Repository
+ * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Rule
+ */
 class Repository implements ArrayAccess, RuleContract
 {
     /**
