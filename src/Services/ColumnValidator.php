@@ -2,6 +2,7 @@
 
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Column;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 
@@ -28,18 +29,41 @@ class ColumnValidator
             mkdir(base_path('rules'));
         }
 
-        $this->table->columns->each(function (Column $column) {
-            $this->nullable($column);
-            $this->dateType($column);
-            $this->maxLength($column);
-            $this->exists($column);
-        });
+        $this->table->columns
+            ->reject(function (Column $column) {
+                return in_array(
+                    $column->COLUMN_NAME,
+                    $this->getRejectColumnNames($column)
+                );
+            })
+            ->each(function (Column $column) {
+                $this->nullable($column);
+                $this->dateType($column);
+                $this->maxLength($column);
+                $this->exists($column);
+            });
 
         $file = $this->filename();
         if (file_put_contents($file, $this->parse())) {
             return str_replace(base_path() . '/', '', $file);
         }
         return false;
+    }
+
+    /**
+     * @param Column $column
+     * @return array
+     */
+    public function getRejectColumnNames(Column $column)
+    {
+        $reject_column_name = [];
+        if ($column->primary_key) {
+            $reject_column_name[] = $column->COLUMN_NAME;
+        }
+        $reject_column_name[] = Model::CREATED_AT;
+        $reject_column_name[] = Model::UPDATED_AT;
+        $reject_column_name[] = 'deleted_at';
+        return $reject_column_name;
     }
 
     /**

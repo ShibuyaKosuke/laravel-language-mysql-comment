@@ -13,6 +13,14 @@ class Column extends InformationSchema
     protected $table = 'information_schema.columns';
 
     /**
+     * @return bool
+     */
+    public function getPrimaryKeyAttribute(): bool
+    {
+        return $this->COLUMN_KEY === 'PRI';
+    }
+
+    /**
      * @return BelongsTo Table
      */
     public function table(): BelongsTo

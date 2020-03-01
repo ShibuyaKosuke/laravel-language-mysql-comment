@@ -3,6 +3,7 @@
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 /**
  * Class Table
@@ -11,6 +12,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Table extends InformationSchema
 {
     protected $table = 'information_schema.tables';
+
+    /**
+     * @return string
+     */
+    public function getTableNameAttribute()
+    {
+        return Str::studly(Str::singular($this->TABLE_NAME));
+    }
 
     /**
      * @return HasMany Column[]
