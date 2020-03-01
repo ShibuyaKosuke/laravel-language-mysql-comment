@@ -16,7 +16,7 @@ class Table extends InformationSchema
     /**
      * @return string
      */
-    public function getTableNameAttribute()
+    public function getModelNameAttribute()
     {
         return Str::studly(Str::singular($this->TABLE_NAME));
     }
