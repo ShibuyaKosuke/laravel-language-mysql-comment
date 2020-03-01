@@ -14,10 +14,15 @@ class ColumnValidator
 {
     private $table;
     private $rules = [];
+    private $directory;
 
     public function __construct(Table $table)
     {
         $this->table = $table;
+        $this->directory = trim(
+            config('laravel-language-mysql-comment.rule_directory'),
+            '/'
+        );
     }
 
     /**
@@ -25,8 +30,8 @@ class ColumnValidator
      */
     public function make()
     {
-        if (!file_exists(base_path('rules'))) {
-            mkdir(base_path('rules'));
+        if (!file_exists(base_path($this->directory))) {
+            mkdir(base_path($this->directory));
         }
 
         $this->table->columns
@@ -63,7 +68,8 @@ class ColumnValidator
         $reject_column_name[] = Model::CREATED_AT;
         $reject_column_name[] = Model::UPDATED_AT;
         $reject_column_name[] = 'deleted_at';
-        return $reject_column_name;
+
+        return array_merge($reject_column_name, config('laravel-language-mysql-comment.reject_column_name'));
     }
 
     /**
@@ -122,7 +128,7 @@ class ColumnValidator
      */
     protected function filename(): string
     {
-        return base_path(sprintf('rules/%s.php', $this->table->TABLE_NAME));
+        return base_path(sprintf($this->directory . '/%s.php', $this->table->TABLE_NAME));
     }
 
     /**

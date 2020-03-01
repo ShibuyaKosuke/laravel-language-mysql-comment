@@ -17,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPath('rules');
+
+        $this->publishes([
+            __DIR__ . '/../config/laravel-language-mysql-comment.php' => config_path('laravel-language-mysql-comment.php'),
+        ]);
     }
 
     public function register()
@@ -25,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
         if (file_exists($file)) {
             require_once($file);
         }
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/laravel-language-mysql-comment.php', 'laravel-language-mysql-comment'
+        );
     }
 
     protected function registerPath($name)
