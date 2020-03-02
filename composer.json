@@ -20,7 +20,9 @@
             ]
         }
     },
-    "require": {},
+    "require": {
+        "atehnix/laravel-stubs": "^6.4"
+    },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5"
     },
