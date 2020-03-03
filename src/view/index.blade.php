@@ -5,7 +5,13 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/vendor/fontawesome-free/css/all.min.css">
     <style>
+        .fas {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
         table.table {
             white-space: nowrap;
         }
@@ -62,7 +68,16 @@
                     <tbody>
                     @foreach($table->columns as $column)
                         <tr id="{{ $column->TABLE_NAME }}.{{ $column->COLUMN_NAME }}">
-                            <td>{{ $column->COLUMN_NAME }}</td>
+                            <td>
+                                @if($column->primary_key)
+                                    <i class="fa-fw fas fa-key"></i>
+                                @elseif($column->has_index)
+                                    <i class="fa-fw fas fa-tag"></i>
+                                @else
+                                    <i class="fa-fw fas"></i>
+                                @endif
+                                {{ $column->COLUMN_NAME }}
+                            </td>
                             <td>{{ $column->COLUMN_COMMENT }}</td>
                             <td>{{ $column->COLUMN_TYPE }}</td>
                             <td>

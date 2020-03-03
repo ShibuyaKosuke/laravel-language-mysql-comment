@@ -21,6 +21,11 @@ class Column extends InformationSchema
         return $this->COLUMN_KEY === 'PRI';
     }
 
+    public function getHasIndexAttribute(): bool
+    {
+        return $this->COLUMN_KEY != '';
+    }
+
     /**
      * @return BelongsTo Table
      */
