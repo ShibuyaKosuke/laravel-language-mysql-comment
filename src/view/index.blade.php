@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>Document</title>
+    <title>Table definition for {{ $tables->first()->getConnection()->getDatabaseName() }}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -22,6 +22,11 @@
 
         div.table h2 {
             margin: 2rem 0;
+        }
+
+        .is-null {
+            color: rgba(0, 0, 0, 0.5);
+            font-style: italic;
         }
     </style>
 </head>
@@ -88,8 +93,11 @@
                                     YES
                                 @endif
                             </td>
-                            <td>
-                                {{ $column->COLUMN_DEFAULT }}
+                            <td> @if($column->IS_NULLABLE === 'NO' || $column->COLUMN_DEFAULT)
+                                    {{ $column->COLUMN_DEFAULT }}
+                                @else
+                                    <span class="is-null">NULL</span>
+                                @endif
                             </td>
                             <td>
                                 <a href="#{{ $column->keyColumnUsage->belongs_to }}">
