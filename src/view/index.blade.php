@@ -28,7 +28,10 @@
 <body>
 
 <div class="container-fluid">
-    <ol id="top">
+
+    <h1 id="top">{{ $tables->first()->getConnection()->getDatabaseName() }}</h1>
+
+    <ol>
         @foreach($tables as $table)
             <li>
                 <a href="#{{ $table->TABLE_NAME }}">{{ $table->TABLE_NAME }}</a>
