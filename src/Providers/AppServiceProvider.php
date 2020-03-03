@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__ . '/../config/laravel-language-mysql-comment.php', 'laravel-language-mysql-comment'
         );
+
+        $this->loadViewsFrom(__DIR__ . '/../view', 'laravel-language-mysql-comment');
     }
 
     protected function registerPath($name)

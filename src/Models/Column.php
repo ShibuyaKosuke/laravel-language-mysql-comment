@@ -3,6 +3,7 @@
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Column
@@ -35,7 +36,14 @@ class Column extends InformationSchema
     {
         return $this->belongsTo(KeyColumnUsage::class, 'COLUMN_NAME', 'COLUMN_NAME')
             ->whereNotNull('REFERENCED_TABLE_NAME')
-            ->whereNotNull('REFERENCED_COLUMN_NAME');
+            ->whereNotNull('REFERENCED_COLUMN_NAME')
+            ->withDefault();
+    }
+
+    public function hasManyColumns(): HasMany
+    {
+        return $this->hasMany(KeyColumnUsage::class, 'REFERENCED_COLUMN_NAME', 'COLUMN_NAME')
+            ->where('REFERENCED_TABLE_NAME', $this->TABLE_NAME);
     }
 
     /**

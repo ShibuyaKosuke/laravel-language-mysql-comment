@@ -21,6 +21,28 @@ class KeyColumnUsage extends InformationSchema
     }
 
     /**
+     * @return string|null
+     */
+    public function getBelongsToAttribute()
+    {
+        if (is_null($this->REFERENCED_TABLE_NAME) || is_null($this->REFERENCED_COLUMN_NAME)) {
+            return null;
+        }
+        return sprintf('%s.%s', $this->REFERENCED_TABLE_NAME, $this->REFERENCED_COLUMN_NAME);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHasManyAttribute()
+    {
+        if (is_null($this->TABLE_NAME) || is_null($this->COLUMN_NAME)) {
+            return null;
+        }
+        return sprintf('%s.%s', $this->TABLE_NAME, $this->COLUMN_NAME);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getQueueableRelations()
