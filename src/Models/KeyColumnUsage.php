@@ -12,6 +12,15 @@ class KeyColumnUsage extends InformationSchema
 {
     protected $table = 'information_schema.key_column_usage';
 
+    protected $appends = [
+        'table_column_name'
+    ];
+
+    public function getTableColumnName()
+    {
+        return sprintf('%s.%s', $this->TABLE_NAME, $this->COLUMN_NAME);
+    }
+
     /**
      * @return BelongsTo Table
      */

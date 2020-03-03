@@ -3,6 +3,7 @@
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -26,7 +27,8 @@ class Table extends InformationSchema
      */
     public function columns(): HasMany
     {
-        return $this->hasMany(Column::class, 'TABLE_NAME', 'TABLE_NAME');
+        return $this->hasMany(Column::class, 'TABLE_NAME', 'TABLE_NAME')
+            ->addSelect(DB::raw('*, CONCAT(TABLE_NAME, \'.\' ,COLUMN_NAME) as `TABLE_COLUMN_NAME`'));
     }
 
     /**
