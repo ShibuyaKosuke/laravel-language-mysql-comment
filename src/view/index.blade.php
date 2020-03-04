@@ -40,6 +40,7 @@
     @foreach($tables as $table)
       <li>
         <a href="#{{ $table->TABLE_NAME }}">{{ $table->TABLE_NAME }}</a>
+        <span>{{ $table->TABLE_COMMENT }}</span>
       </li>
     @endforeach
   </ol>

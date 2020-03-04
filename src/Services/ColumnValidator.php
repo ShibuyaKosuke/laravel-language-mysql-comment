@@ -114,7 +114,7 @@ class ColumnValidator
     private function exists(Column $column)
     {
         $key_column_usage = $column->keyColumnUsage;
-        if ($key_column_usage) {
+        if ($key_column_usage && $key_column_usage->REFERENCED_TABLE_NAME && $key_column_usage->REFERENCED_COLUMN_NAME) {
             $this->rules[$column->COLUMN_NAME][] = sprintf(
                 'exists:%s,%s',
                 $key_column_usage->REFERENCED_TABLE_NAME,
@@ -147,7 +147,7 @@ class ColumnValidator
         foreach ($columns as $col => $val) {
             $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
         }
-        return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];']);
+        return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];', '']);
     }
 
     private function nullableOrRequired(Column $column)

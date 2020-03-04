@@ -3,6 +3,7 @@
 namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Models\Table;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\ColumnTranslator;
 use ShibuyaKosuke\LaravelLanguageMysqlComment\Services\ColumnValidator;
@@ -36,6 +37,9 @@ class LangPublishCommand extends Command
         $tables->get()->each(function (Table $table) {
             $file = (new ColumnValidator($table))->make();
             $this->info('Success: ' . $file);
+
+            Artisan::call(sprintf('make:policy %sPolicy --model=%s', $table->model_name, $table->model_name));
+            Artisan::call(sprintf('make:request %sFormRequest', $table->model_name));
         });
 
         $tables->where('TABLE_COMMENT', '<>', '');
