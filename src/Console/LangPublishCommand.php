@@ -38,7 +38,7 @@ class LangPublishCommand extends Command
             $file = (new ColumnValidator($table))->make();
             $this->info('Success: ' . $file);
 
-            Artisan::call(sprintf('make:policy %sPolicy', $table->model_name));
+            Artisan::call(sprintf('make:policy %sPolicy --model=%s', $table->model_name, $table->model_name));
             Artisan::call(sprintf('make:request %sFormRequest', $table->model_name));
         });
 
