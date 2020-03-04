@@ -147,7 +147,7 @@ class ColumnValidator
         foreach ($columns as $col => $val) {
             $lines[] = sprintf($indent . '\'%s\' => %s', $col, $val);
         }
-        return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];']);
+        return implode(PHP_EOL, ['<?php', '', 'return [', implode(PHP_EOL, $lines), '];', '']);
     }
 
     private function nullableOrRequired(Column $column)
