@@ -40,6 +40,7 @@
         @foreach($tables as $table)
             <li>
                 <a href="#{{ $table->TABLE_NAME }}">{{ $table->TABLE_NAME }}</a>
+                <span>{{ $table->TABLE_COMMENT }}</span>
             </li>
         @endforeach
     </ol>
@@ -69,8 +70,8 @@
                         <th width="15%">DATA TYPE</th>
                         <th width="10%">NOT NULL</th>
                         <th width="10">DEFAULT</th>
-                        <th width="15%">BelongsTo</th>
-                        <th width="15%">HasMany</th>
+                        <th width="15%">BelongsTo/BelongsToMany</th>
+                        <th width="15%">HasMany/HasOne</th>
                     </tr>
                     </thead>
                     <tbody>
