@@ -5,49 +5,53 @@ namespace DummyNamespace;
 use DummyFullModelClass;
 use DummyRootNamespaceHttp\Controllers\Controller;
 use DummyRootNamespaceHttp\Requests\DummyModelClassFromRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class DummyClass extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $DummyTable = DummyModelClass::paginate();
+        return view('DummyTable.index', compact('DummyTable'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('DummyTable.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  DummyModelClassFromRequest  $request
+     * @return RedirectResponse
      */
-    public function store(DummyModelClassFromRequest $request)
+    public function store(DummyModelClassFromRequest $request): RedirectResponse
     {
-        //
+        DummyModelVariable = new DummyModelClass();
+        return redirect()->route('DummyTable.show', compact('DummyModelVariable'));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function show(DummyModelClass $DummyModelVariable)
+    public function show(DummyModelClass $DummyModelVariable): View
     {
-        //
+        return view('DummyTable.show', compact('DummyModelVariable'));
     }
 
     /**
@@ -58,19 +62,19 @@ class DummyClass extends Controller
      */
     public function edit(DummyModelClass $DummyModelVariable)
     {
-        //
+        return view('DummyTable.edit', compact('DummyModelVariable'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  DummyModelClassFromRequest  $request
      * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function update(DummyModelClassFromRequest $request, DummyModelClass $DummyModelVariable)
+    public function update(DummyModelClassFromRequest $request, DummyModelClass $DummyModelVariable): RedirectResponse
     {
-        //
+        return redirect()->route('DummyTable.show', compact('DummyModelVariable'));
     }
 
     /**
@@ -81,6 +85,7 @@ class DummyClass extends Controller
      */
     public function destroy(DummyModelClass $DummyModelVariable)
     {
-        //
+        $DummyModelVariable->delete();
+        return redirect()->route('DummyTable.index'));
     }
 }

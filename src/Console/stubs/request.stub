@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DummyClass extends FormRequest
 {
+    private $table_name = 'DummyTable';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,7 +25,7 @@ class DummyClass extends FormRequest
      */
     public function rules()
     {
-        return array_merge(\Rule::get('DummyTable'), [
+        return array_merge(\Rule::get($this->table_name), [
             //
         ]);
     }
@@ -35,7 +37,7 @@ class DummyClass extends FormRequest
      */
     public function attributes()
     {
-        return array_merge(\Lang::get('columns.DummyTable'), [
+        return array_merge(\Lang::get("columns.{$this->table_name}"), [
            //
         ]);
     }
