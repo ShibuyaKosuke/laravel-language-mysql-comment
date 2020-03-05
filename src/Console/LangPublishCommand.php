@@ -37,12 +37,14 @@ class LangPublishCommand extends Command
         $tables->get()->each(function (Table $table) {
             $file = (new ColumnValidator($table))->make();
             $this->info('Success: ' . $file);
-
-            Artisan::call(sprintf('make:policy %sPolicy --model=%s', $table->model_name, $table->model_name));
-            Artisan::call(sprintf('make:request %sFormRequest', $table->model_name));
         });
 
         $tables->where('TABLE_COMMENT', '<>', '');
+
+        $tables->get()->each(function (Table $table) {
+            Artisan::call(sprintf('make:policy %sPolicy --model=%s', $table->model_name, $table->model_name));
+            Artisan::call(sprintf('make:request %sFormRequest', $table->model_name));
+        });
 
         if ((new TableTranslator($tables->get()))->make()) {
             $this->info('Success: Resources/lang/tables.php');
