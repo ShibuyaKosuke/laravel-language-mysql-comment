@@ -39,7 +39,7 @@ class DummyClass extends Controller
      */
     public function store(DummyFormRequestClass $request): RedirectResponse
     {
-        DummyModelVariable = new DummyModelClass();
+        $DummyModelVariable = new DummyModelClass();
         return redirect()->route('DummyTable.show', compact('DummyModelVariable'));
     }
 

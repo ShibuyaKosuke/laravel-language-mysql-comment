@@ -41,6 +41,21 @@ class Table extends InformationSchema
             ->whereNotNull('REFERENCED_COLUMN_NAME');
     }
 
+    public function getIsIntermediateTableAttribute($key)
+    {
+        $table_names = Table::all()->pluck('TABLE_NAME');
+        if ($this->columns->pluck('COLUMN_NAME')->contains('id')) {
+            return false;
+        }
+        $filtered = $this->columns->filter(function (Column $column) use ($table_names) {
+            $table_name = Str::plural(
+                str_replace('_id', '', $column->COLUMN_NAME)
+            );
+            return $table_names->contains($table_name);
+        });
+        return $filtered->count() == 2;
+    }
+
     /**
      * @inheritDoc
      */
