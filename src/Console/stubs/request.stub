@@ -4,7 +4,7 @@ namespace DummyNamespace;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DummyClass extends FormRequest
+class DummyFormRequestClass extends FormRequest
 {
     private $table_name = 'DummyTable';
 
