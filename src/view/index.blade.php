@@ -39,6 +39,12 @@
   <ol>
     @foreach($tables as $table)
       <li>
+        @if($table->is_link)
+          <span class="badge badge-info">L</span>
+        @else
+          <span class="badge badge-danger">M</span>
+        @endif
+
         <a href="#{{ $table->TABLE_NAME }}">{{ $table->TABLE_NAME }}</a>
         <span>{{ $table->TABLE_COMMENT }}</span>
       </li>
@@ -67,11 +73,12 @@
           <tr>
             <th width="15%">COLUMN NAME</th>
             <th width="20%">COMMENT</th>
-            <th width="15%">DATA TYPE</th>
+            <th width="10%">DATA TYPE</th>
             <th width="10%">NOT NULL</th>
-            <th width="10">DEFAULT</th>
+            <th width="5%">DEFAULT</th>
             <th width="15%">BelongsTo</th>
             <th width="15%">HasMany/HasOne</th>
+            <th width="15%">BelongsToMany</th>
           </tr>
           </thead>
           <tbody>
@@ -94,7 +101,8 @@
                   YES
                 @endif
               </td>
-              <td> @if($column->IS_NULLABLE === 'NO' || $column->COLUMN_DEFAULT)
+              <td>
+                @if($column->IS_NULLABLE === 'NO' || $column->COLUMN_DEFAULT)
                   {{ $column->COLUMN_DEFAULT }}
                 @else
                   <span class="is-null">NULL</span>
@@ -106,13 +114,22 @@
                 </a>
               </td>
               <td>
-                <ol class="m-0">
-                  @foreach($column->hasManyColumns as $hasMany)
-                    <li>
+                @foreach($column->hasManyColumns as $hasMany)
+                  @if(!$hasMany->table->is_link)
+                    <div>
                       <a href="#{{ $hasMany->has_many }}">{{ $hasMany->has_many }}</a>
-                    </li>
-                  @endforeach
-                </ol>
+                    </div>
+                  @endif
+                @endforeach
+              </td>
+              <td>
+                @foreach($column->hasManyColumns as $hasMany)
+                  @if($hasMany->table->is_link)
+                    <div>
+                      <a href="#{{ $hasMany->has_many }}">{{ $hasMany->has_many }}</a>
+                    </div>
+                  @endif
+                @endforeach
               </td>
             </tr>
           @endforeach

@@ -23,6 +23,46 @@ class Table extends InformationSchema
     }
 
     /**
+     * @return string
+     */
+    public function getControllerNameAttribute()
+    {
+        return sprintf('%sController', $this->model_name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormRequestNameAttribute()
+    {
+        return sprintf('%sFormRequest', $this->model_name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFactoryNameAttribute()
+    {
+        return sprintf('%sFactory', $this->model_name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeederNameAttribute()
+    {
+        return sprintf('%sSeeder', $this->model_name);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsLinkAttribute()
+    {
+        return strpos($this->TABLE_COMMENT, 'link:') === 0;
+    }
+
+    /**
      * @return HasMany Column[]
      */
     public function columns(): HasMany

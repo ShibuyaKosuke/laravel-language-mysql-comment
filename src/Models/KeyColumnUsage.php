@@ -26,7 +26,7 @@ class KeyColumnUsage extends InformationSchema
      */
     public function table(): BelongsTo
     {
-        return $this->belongsTo(Table::class, 'TABLE_NAME', 'TABLE_NAME');
+        return $this->belongsTo(Table::class, 'TABLE_NAME', 'TABLE_NAME')->withDefault();
     }
 
     /**
