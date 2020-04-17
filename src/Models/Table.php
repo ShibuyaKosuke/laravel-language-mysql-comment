@@ -81,6 +81,17 @@ class Table extends InformationSchema
             ->whereNotNull('REFERENCED_COLUMN_NAME');
     }
 
+    public function getIsIntermediateTableAttribute($key)
+    {
+        if ($this->columns->pluck('COLUMN_NAME')->contains('id')) {
+            return false;
+        }
+        $filtered = $this->keyColumnUsage->filter(function (KeyColumnUsage $keyColumnUsage) {
+            return !is_null($keyColumnUsage->belongsTo);
+        });
+        return $filtered->count() == 2;
+    }
+
     /**
      * @inheritDoc
      */
