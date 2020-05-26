@@ -5,10 +5,42 @@ namespace ShibuyaKosuke\LaravelLanguageMysqlComment\Models;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * Class Table
  * @package ShibuyaKosuke\LaravelLanguageMysqlComment\Models
+ *
+ * @property string TABLE_CATALOG varchar
+ * @property string TABLE_SCHEMA varchar
+ * @property string TABLE_NAME varchar
+ * @property string TABLE_TYPE varchar
+ * @property string ENGINE varchar
+ * @property int VERSION bigint
+ * @property string ROW_FORMAT varchar
+ * @property int TABLE_ROWS bigint
+ * @property int AVG_ROW_LENGTH bigint
+ * @property int DATA_LENGTH bigint
+ * @property int MAX_DATA_LENGTH bigint
+ * @property int INDEX_LENGTH bigint
+ * @property int DATA_FREE bigint
+ * @property int AUTO_INCREMENT bigint
+ * @property string CREATE_TIME datetime
+ * @property string UPDATE_TIME datetime
+ * @property string CHECK_TIME datetime
+ * @property string TABLE_COLLATION varchar
+ * @property int CHECKSUM bigint
+ * @property string CREATE_OPTIONS varchar
+ * @property string TABLE_COMMENT varchar
+ * @property string model_name
+ * @property string controller_name
+ * @property string factory_name
+ * @property string seeder_name
+ * @property string form_request_name
+ * @property string is_link
+ * @property Boolean is_intermediate_table
+ * @property Column[] columns
+ * @property KeyColumnUsage[] keyColumnUsage
  */
 class Table extends InformationSchema
 {
@@ -86,9 +118,10 @@ class Table extends InformationSchema
         if ($this->columns->pluck('COLUMN_NAME')->contains('id')) {
             return false;
         }
-        $filtered = $this->keyColumnUsage->filter(function (KeyColumnUsage $keyColumnUsage) {
-            return !is_null($keyColumnUsage->belongsTo);
-        });
+        $filtered = $this->keyColumnUsage
+            ->filter(function (KeyColumnUsage $keyColumnUsage) {
+                return !is_null($keyColumnUsage->belongsTo);
+            });
         return $filtered->count() == 2;
     }
 
