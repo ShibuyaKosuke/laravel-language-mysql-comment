@@ -125,6 +125,22 @@ class Table extends InformationSchema
         return $filtered->count() == 2;
     }
 
+    public function getBelongsToAttribute()
+    {
+        return $this->keyColumnUsage;
+    }
+
+    public function getHasManyAttribute()
+    {
+        $table_names = KeyColumnUsage::query()
+            ->select('TABLE_NAME')
+            ->where('REFERENCED_TABLE_NAME', $this->TABLE_NAME)
+            ->whereNotIn('COLUMN_NAME', ['created_by', 'updated_by', 'deleted_by'])
+            ->get()
+            ->pluck('TABLE_NAME');
+        return ($table_names) ? Table::query()->whereIn('TABLE_NAME', $table_names)->get() : null;
+    }
+
     /**
      * @inheritDoc
      */

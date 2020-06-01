@@ -62,8 +62,7 @@ class Column extends InformationSchema
     {
         return $this->belongsTo(KeyColumnUsage::class, 'COLUMN_NAME', 'COLUMN_NAME')
             ->whereNotNull('REFERENCED_TABLE_NAME')
-            ->whereNotNull('REFERENCED_COLUMN_NAME')
-            ->withDefault();
+            ->whereNotNull('REFERENCED_COLUMN_NAME');
     }
 
     public function hasManyColumns(): HasMany
