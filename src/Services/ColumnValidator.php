@@ -86,7 +86,7 @@ class ColumnValidator
     private function dateType(Column $column)
     {
         if ($column->is_datetime) {
-            $this->rules[$column->COLUMN_NAME][] = 'datetime';
+            $this->rules[$column->COLUMN_NAME][] = 'date';
         } elseif ($column->is_date) {
             $this->rules[$column->COLUMN_NAME][] = 'date';
         } elseif ($column->is_integer) {

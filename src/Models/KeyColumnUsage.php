@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string REFERENCED_TABLE_SCHEMA
  * @property string REFERENCED_TABLE_NAME
  * @property string REFERENCED_COLUMN_NAME
+ * @property Table referenced
  */
 class KeyColumnUsage extends InformationSchema
 {
@@ -61,6 +62,11 @@ class KeyColumnUsage extends InformationSchema
             return null;
         }
         return sprintf('%s.%s', $this->TABLE_NAME, $this->COLUMN_NAME);
+    }
+
+    public function referenced()
+    {
+        return $this->belongsTo(Table::class, 'REFERENCED_TABLE_NAME', 'TABLE_NAME')->withDefault();
     }
 
     /**
