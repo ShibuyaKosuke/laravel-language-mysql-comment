@@ -24,6 +24,6 @@ class ValidationRule
      */
     public static function get(string $key)
     {
-        return App::get('rules')->get($key);
+        return App::get('rules')->get($key) ?? [];
     }
 }
