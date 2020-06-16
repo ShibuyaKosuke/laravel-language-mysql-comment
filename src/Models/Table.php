@@ -38,6 +38,8 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @property string seeder_name
  * @property string form_request_name
  * @property string is_link
+ * @property KeyColumnUsage[] belongs_to
+ * @property Table[] has_many
  * @property Boolean is_intermediate_table
  * @property Column[] columns
  * @property KeyColumnUsage[] keyColumnUsage
@@ -113,6 +115,10 @@ class Table extends InformationSchema
             ->whereNotNull('REFERENCED_COLUMN_NAME');
     }
 
+    /**
+     * @param $key
+     * @return bool
+     */
     public function getIsIntermediateTableAttribute($key)
     {
         if ($this->columns->pluck('COLUMN_NAME')->contains('id')) {
@@ -125,11 +131,17 @@ class Table extends InformationSchema
         return $filtered->count() == 2;
     }
 
+    /**
+     * @return KeyColumnUsage[]
+     */
     public function getBelongsToAttribute()
     {
         return $this->keyColumnUsage;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|null
+     */
     public function getHasManyAttribute()
     {
         $table_names = KeyColumnUsage::query()
