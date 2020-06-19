@@ -154,10 +154,38 @@ class Table extends InformationSchema
     }
 
     /**
-     * @inheritDoc
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|null
      */
-    public function getQueueableRelations()
+    public function getBelongsToManyAttribute()
     {
-        return [];
+        if (!$this->TABLE_COMMENT) {
+            return null;
+        }
+        $tables = Table::query()
+            ->where('TABLE_COMMENT', '<>', '')
+            ->get()
+            ->pluck('TABLE_NAME');
+
+        $join = $tables->crossJoin($tables)
+            ->map(function ($join) {
+                return implode('_', array_map(function ($join) {
+                    return Str::singular($join);
+                }, $join));
+            });
+
+        $belongsToMany = KeyColumnUsage::query()
+            ->whereIn('TABLE_NAME', function ($query) use ($join) {
+                $query->from('information_schema.KEY_COLUMN_USAGE')
+                    ->select('TABLE_NAME')
+                    ->whereNotNull('REFERENCED_TABLE_NAME')
+                    ->where('REFERENCED_TABLE_NAME', '=', $this->TABLE_NAME)
+                    ->whereIn('TABLE_NAME', $join);
+            })
+            ->whereNotNull('REFERENCED_TABLE_NAME')
+            ->where('REFERENCED_TABLE_NAME', '<>', $this->TABLE_NAME)
+            ->get();
+
+        $table_names = $belongsToMany->pluck('REFERENCED_TABLE_NAME') ?? [];
+        return ($table_names) ? Table::query()->whereIn('TABLE_NAME', $table_names)->get() : null;
     }
 }
